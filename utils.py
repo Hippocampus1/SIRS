@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import settings
+from global_config import BaseConfig
 
 class Logger(object):
     """Utils Logging has 4 variables that controls if the log goes to the output(screen)
@@ -36,6 +36,6 @@ class Logger(object):
         if self._warning:
             print("[WARNING]: {}".format(msg))
 
-logger = Logger(debug=settings.DEBUG)
+logger = Logger(debug=BaseConfig.DEBUG)
 
 __all__ = ['logger']

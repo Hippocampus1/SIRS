@@ -1,11 +1,9 @@
 #!/usr/bin/python
-
 import settings
 from utils import logger as log
 
 import mysql.connector
 from mysql.connector import errorcode
-
 
 try:
     log.debug("Connecting to mysql DB with config:({}).".format(settings.DB_CONFIG))
