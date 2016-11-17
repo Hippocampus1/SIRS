@@ -1,45 +1,28 @@
 /* Populate the database */
 /*************************/
 
-/* User(id, email, password, name, birth) */
-INSERT INTO User (email, password, name, birth) VALUES (AES_ENCRYPT('comer@gmail.com', UNHEX('F3229A0B371ED2D9441B830D21A390C3')), 'dsads', 'sads', 'sadas');
+/* User(id, username, password, email, first_name, last_name, birth) */
+-- INSERT INTO User (email, password, name, birth) VALUES (AES_ENCRYPT('comer@gmail.com', UNHEX('F3229A0B371ED2D9441B830D21A390C3')), 'dsads', 'sads', 'sadas');
 -- INSERT INTO User (email, password, name, birth) VALUES (AES_ENCRYPT('comer@gmail.com', UNHEX(SHA2('passwordxpto',512))));
-INSERT INTO User VALUES (2, 'EmpresaFixe');
-INSERT INTO User VALUES (3, 'EmpresaAzul');
-INSERT INTO User VALUES (4, 'EmpresaLocal');
-INSERT INTO User VALUES (5, 'EMpresaVerde');
+INSERT INTO User VALUES (1, 'j09', '12345', 'j09x@hotmail.com', 'joao', 'mateus', '1995-03-14');
+INSERT INTO User VALUES (2, 'gheo1998', 'queijo', 'ghe98@gmail.com', 'guilherme', 'castanheiro', '1987-06-27');
+INSERT INTO User VALUES (3, 'marrria', 'batatas', 'mari@sapo.pt', 'maria', 'rocha', '1977-09-01');
+
+INSERT INTO User VALUES (4, 'vortex', 'cremoso', 'docinho@gmail.com', 'roberto', 'foca', '1970-02-11');
+INSERT INTO User VALUES (5, 'axul', 'natural', 'vegetal56@hotmail.com', 'liliana', 'sousa', '1985-12-19');
+INSERT INTO User VALUES (6, 'limao', 'password', 'cha@gmail.com', 'miguel', 'lourenco', '1969-10-07');
 
 /* Doctor (id, specialty) */
-INSERT INTO Doctor VALUES (1, 'FixEverything');
-INSERT INTO Doctor VALUES (2, 'EmpresaFixe');
-INSERT INTO Doctor VALUES (3, 'EmpresaAzul');
-INSERT INTO Doctor VALUES (4, 'EmpresaLocal');
-INSERT INTO Doctor VALUES (5, 'EMpresaVerde');
+INSERT INTO Doctor VALUES (4, 'dermatologia');
+INSERT INTO Doctor VALUES (5, 'ginecologia');
+INSERT INTO Doctor VALUES (6, 'homeopatia');
 
-/* Nurse (id) */
-INSERT INTO Nurse VALUES ('Rua D.Henrique');
-INSERT INTO Nurse VALUES ('Rua do Manuel');
-INSERT INTO Nurse VALUES ('Rua amarela');
-INSERT INTO Nurse VALUES ('Rua vermelha');
-INSERT INTO Nurse VALUES ('Rua cor-de-rosa');
+/* Patient (id, blood_type, weight, deseases) */
+INSERT INTO Patient VALUES (1, 'A+', '70.232', 'cenas');
+INSERT INTO Patient VALUES (2, 'AB', '45.356', 'doenca');
+INSERT INTO Patient VALUES (3, 'B-', '90.123', 'manias');
 
-/* Pacient (id) */
-INSERT INTO Pacient VALUES (231231231, 261234567, 'Rui');
-INSERT INTO Pacient VALUES (123123123, 264987654, 'Guilherme');
-INSERT INTO Pacient VALUES (789789789, 263098765, 'Ricardo');
-INSERT INTO Pacient VALUES (456456456, 265231425, 'Madalena');
-INSERT INTO Pacient VALUES (234234234, 263143567, 'Marta');
-
-/* Receptionist (id) */
-INSERT INTO Receptionist VALUES (1);
-INSERT INTO Receptionist VALUES (2);
-INSERT INTO Receptionist VALUES (3);
-INSERT INTO Receptionist VALUES (4);
-INSERT INTO Receptionist VALUES (5);
-
-/* Appointment(patient_id, doctor_id, date, office) */
-INSERT INTO Appointment VALUES (1);
-INSERT INTO Appointment VALUES (2);
-INSERT INTO Appointment VALUES (3);
-INSERT INTO Appointment VALUES (4);
-INSERT INTO Appointment VALUES (5);
+/* Appointment(patient_id, doctor_id, date, time, office) */
+INSERT INTO Appointment VALUES (1, 4, '2016-12-04', '12:00', 'gab 5');
+INSERT INTO Appointment VALUES (3, 5, '2016-12-13', '14:00', 'gab 39');
+INSERT INTO Appointment VALUES (3, 6, '2016-12-13', '17:30', 'gab 21');
