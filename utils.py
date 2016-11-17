@@ -1,8 +1,10 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
-import os
 import sys
+import cmd
+import argparse
 from global_config import BaseConfig
+
 
 class Logger(object):
     """Utils Logging has 4 variables that controls if the log goes to the output(screen)
@@ -38,4 +40,51 @@ class Logger(object):
 
 logger = Logger(debug=BaseConfig.DEBUG)
 
-__all__ = ['logger']
+
+class BaseMenu(cmd.Cmd):
+    """"""
+    prompt = '$ '
+    intro = "=== Medical Workstation ==="
+
+    doc_header = 'Documented commands: "$ help <command>"'
+    misc_header = ''
+    undoc_header = ''
+    ruler = '-'
+
+    def do_exit(self, string_input):
+        logger.debug("Exiting application")
+        return True
+
+    def help_exit(self):
+        logger.info("Exit current user application.")
+
+
+class BaseCommand(object):
+    """Abstraction for each of our custom commands"""
+
+    def __init__(self, *args, **kwargs):
+        super(BaseCommand, self).__init__(*args, **kwargs)
+
+    def setup_argparse(self, **kwargs):
+        """Wrapper that returns custom ArgumentParser object"""
+        class CustomArgumentParser(argparse.ArgumentParser):
+            """Custom ArgumentParser for BaseMenu"""
+            def parse_args(self, args=None, namespace=None):
+                # make sure input arguments are a list and not a string
+                args = args.split()
+                args = super(CustomArgumentParser, self).parse_args(
+                    args, namespace)
+                if getattr(self, "trigger_error_exception", False):
+                    raise ValueError("CustomArgumentParser Error:")
+                return args
+
+            def error(self, message):
+                """overwrites error ArgumentParser method so it doesnt
+                call exit function"""
+                self._print_message('error: %s\n' % message, sys.stderr)
+                self.trigger_error_exception = True
+
+        self.parser = CustomArgumentParser(**kwargs)
+        return self.parser
+
+__all__ = ['logger', "BaseMenu", "BaseCommand"]

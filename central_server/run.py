@@ -22,8 +22,8 @@ def login_view():
                 'email': user.email
             })
 
-
     return jsonify(response)
+
 
 if __name__ == "__main__":
     """Initialize flask app"""
