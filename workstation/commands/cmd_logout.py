@@ -1,6 +1,8 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys
+import requests
+from workstation.config import WorkstationConfig as config
 from utils import logger, BaseCommand
 
 
@@ -15,7 +17,7 @@ class LogoutCommand(BaseCommand):
         except ValueError: return
 
         # logging out user
-        logger.debug("Logout")
+        response = requests.post(config.CS_LOGOUT_URL, json={})
 
 
     def help_logout(self):

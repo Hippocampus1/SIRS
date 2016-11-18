@@ -1,13 +1,13 @@
 import sys
 from utils import logger as log, BaseMenu
-from workstation.commands import (LoginCommand, LogoutCommand,
-                                  CreateUserCommand)
+from workstation.commands import *
 
 # import and create WorkstationMenu with all available commands
 class WorkstationMenu(BaseMenu,
                       LoginCommand,
                       LogoutCommand,
-                      CreateUserCommand):
+                      CreateUserCommand,
+                      ListUsersCommand):
     pass
 
 if __name__ == "__main__":

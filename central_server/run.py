@@ -25,6 +25,63 @@ def login_view():
     return jsonify(response)
 
 
+@app.route("/create-user/", methods=["POST"])
+def create_user_view():
+    response = dict()
+    req = request.get_json()
+
+    if request.method == "POST":
+        import pdb; pdb.set_trace()
+        user = User(**req)
+        user.save()
+        response.update({
+            'message': "User {} was created successfully".format(repr(user))
+        })
+
+        log.debug("[create_user_view][POST]")
+
+    return jsonify(response)
+
+
+@app.route("/update-user/", methods=["POST"])
+def update_user_view():
+    response = dict()
+    req = request.get_json()
+
+    if request.method == "POST":
+        log.debug("[update_user_view][POST]")
+
+    return jsonify(response)
+
+
+@app.route("/delete-user/", methods=["POST"])
+def delete_user_view():
+    response = dict()
+    req = request.get_json()
+
+    if request.method == "POST":
+        log.debug("[delete_user_view][POST]")
+
+    return jsonify(response)
+
+
+@app.route("/list-users/", methods=["GET"])
+def list_users_view():
+    response = dict()
+    req = request.get_json()
+
+    if request.method == "GET":
+        log.debug("[list_users_view][GET]")
+        response["objects"] = list()
+        for user in User.query.filter():
+            response["objects"].append(user.to_dict())
+
+
+    return jsonify(response)
+
+
+
+
 if __name__ == "__main__":
     """Initialize flask app"""
     app.run()

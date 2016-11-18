@@ -1,6 +1,8 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 import sys
+import requests
+from workstation.config import WorkstationConfig as config
 from utils import logger, BaseCommand
 
 
@@ -20,9 +22,9 @@ class LoginCommand(BaseCommand):
 
         response = None
         try:
-            # response = requests.post(config.CS_LOGIN_URL, json={"username": username, "password": password})
-            # response = response.json()
-            response = {}
+            json = {"username": args.username, "password": args.password}
+            response = requests.post(config.CS_LOGIN_URL, json=json)
+            response = response.json()
             if response.get("error"):
                 logger.error("Error: {}".format(response.get("error")))
                 sys.exit(1)
