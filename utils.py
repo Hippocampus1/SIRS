@@ -51,6 +51,8 @@ class BaseMenu(cmd.Cmd):
     undoc_header = ''
     ruler = '-'
 
+    context = {}
+
     def do_exit(self, string_input):
         logger.debug("Exiting application")
         return True
@@ -61,6 +63,8 @@ class BaseMenu(cmd.Cmd):
 
 class BaseCommand(object):
     """Abstraction for each of our custom commands"""
+
+    context = {}
 
     def __init__(self, *args, **kwargs):
         super(BaseCommand, self).__init__(*args, **kwargs)
@@ -81,7 +85,7 @@ class BaseCommand(object):
             def error(self, message):
                 """overwrites error ArgumentParser method so it doesnt
                 call exit function"""
-                self._print_message('error: %s\n' % message, sys.stderr)
+                self._print_message('[ERROR]: %s\n' % message, sys.stderr)
                 self.trigger_error_exception = True
 
         self.parser = CustomArgumentParser(**kwargs)

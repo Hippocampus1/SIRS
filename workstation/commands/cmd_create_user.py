@@ -3,17 +3,18 @@
 import requests
 from workstation.config import WorkstationConfig as config
 from utils import logger, BaseCommand
+from workstation.decorators import try_except
 
 
 class CreateUserCommand(BaseCommand):
 
+    @try_except
     def do_create_user(self, input_string):
         self.setup_argparse()
         self.parser.add_argument('-u',
             dest='username', type=str, help='User username.', required=True)
         self.parser.add_argument('-p',
             dest='password', type=str, help='User password.', required=True)
-
         # validate arguments
         try: args = self.parser.parse_args(input_string)
         except ValueError: return
@@ -31,8 +32,13 @@ class CreateUserCommand(BaseCommand):
         }
         json.update(optional_args)
 
-        response = requests.post(config.CS_CREATE_USER_URL, json=json)
+        response = requests.post(config.CS_CREATE_USER_URL,
+                                 headers=self.context.get('headers'),
+                                 json=json)
         response = response.json()
+        if response.get("error"):
+            logger.error("Error: {}".format(response.get("error")))
+            return
         logger.info(response)
 
     def help_create_user(self):

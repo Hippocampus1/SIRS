@@ -1,7 +1,10 @@
+from flask_login import UserMixin
 from central_server import db
 from utils import logger
 
-class User(db.Model):
+class User(UserMixin, db.Model):
+    __tablename__ = 'User'
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128), unique=True)
     password = db.Column(db.String(128))
@@ -19,6 +22,11 @@ class User(db.Model):
         self.last_name = last_name
         self.birth_date = birth_date
 
+    @property
+    def is_admin(self):
+        """Wrapper to check if user is admin"""
+        return self.username in ['admin', 'abc']
+
     def __repr__(self):
         """Return representation of user object"""
         return "<User {}>".format(self.username)
@@ -27,6 +35,8 @@ class User(db.Model):
         """Convert user object into dictionary"""
         return dict([
             ("username", self.username),
+            ("password", self.password),
+            ("is_admin", self.is_admin),
             ("email", self.email),
             ("first_name", self.first_name),
             ("last_name", self.last_name),
@@ -35,6 +45,12 @@ class User(db.Model):
 
     def save(self):
         """Saves object into database"""
-        db.session.add(self)
-        db.session.commit()
-        logger.debug("Saved {}.".format(repr(self)))
+        try:
+            db.session.add(self)
+            db.session.commit()
+            logger.debug("Saved {}.".format(repr(self)))
+        except Exception, e:
+            logger.error("Error on saving {} (ROLLBACK): {}".format(
+                self.__class__.__name__, e))
+            db.session.remove()
+

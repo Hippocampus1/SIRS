@@ -3,6 +3,7 @@
 import sys
 import requests
 from workstation.config import WorkstationConfig as config
+from workstation.exceptions import AdminLevelUp, PacientLevelUp
 from utils import logger, BaseCommand
 
 
@@ -20,20 +21,28 @@ class LoginCommand(BaseCommand):
         logger.debug("User \"{}:{}\" is trying to login...".format(
             args.username, args.password))
 
-        response = None
         try:
             json = {"username": args.username, "password": args.password}
             response = requests.post(config.CS_LOGIN_URL, json=json)
             response = response.json()
             if response.get("error"):
                 logger.error("Error: {}".format(response.get("error")))
-                sys.exit(1)
+                return
             logger.info("Valid Credentials. Welcome!")
-
         except Exception, e:
             logger.error(e)
             logger.warning("Central Server is unreachable. Try again later")
-            sys.exit(1)
+            return
+
+        # update login headers
+        auth = "{}:{}".format(response.get('username'),
+                              response.get('password'))
+        self.context['headers'] = {'Authorization': "Basic {}".format(auth)}
+        # trigger to change menu
+        if response.get('is_admin'):
+            raise AdminLevelUp
+        else:
+            raise PacientLevelUp
 
     def help_login(self):
         logger.info("Login")

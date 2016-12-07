@@ -1,7 +1,19 @@
 from flask import request, jsonify
+from flask_login import login_user, logout_user
 from utils import logger as log
 from central_server import app
 from central_server.models.user import User
+from central_server.decorators import login_required, admin_required
+
+
+@app.route("/error/")
+def error_view():
+    params = request.args.to_dict()
+    response = {
+        "error": params.get("message")
+    }
+    return jsonify(response)
+
 
 @app.route("/login/", methods=["POST"])
 def login_view():
@@ -12,16 +24,26 @@ def login_view():
         log.debug("[login_view][POST]")
         log.debug("User {}:{} is trying to login".format(req.get('username'), req.get('password')))
         user = User.query.filter_by(username=req.get('username')).first()
+
         log.debug("{} user found".format(user))
         if user is None:
             response.update({
                 'error': "Invalid credentials! Please use an existing account."
             })
         else:
-            response.update({
-                'email': user.email
-            })
+            login_user(user)
+            response.update(user.to_dict())
 
+    return jsonify(response)
+
+
+@app.route("/logout/", methods=["POST"])
+@login_required
+def logout_view():
+    response = dict()
+    if request.method == "POST":
+        log.debug("[logout_view][POST]")
+        logout_user()
     return jsonify(response)
 
 
@@ -31,7 +53,6 @@ def create_user_view():
     req = request.get_json()
 
     if request.method == "POST":
-        import pdb; pdb.set_trace()
         user = User(**req)
         user.save()
         response.update({
@@ -81,7 +102,6 @@ def list_users_view():
 
 
 
-
-if __name__ == "__main__":
-    """Initialize flask app"""
-    app.run()
+# DON'T PUT ANYTHING BELOW THIS COMMENT
+"""Initialize flask app"""
+app.run()
